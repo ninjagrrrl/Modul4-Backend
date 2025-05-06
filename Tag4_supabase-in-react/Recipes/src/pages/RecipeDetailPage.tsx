@@ -40,6 +40,8 @@ export default function RecipeDetailsPage() {
           </li>
         ))}
       </ul>
+      <p>Bewertung: {recipe.rating}</p>
+      <p>Erstellt am: {recipe.created_at}</p>
     </div>
   );
 }

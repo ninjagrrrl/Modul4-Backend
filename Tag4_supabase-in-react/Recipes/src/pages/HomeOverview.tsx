@@ -15,28 +15,74 @@ type Recipe = {
 };
 
 function HomeOverview() {
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [topRatedRecipes, setTopRatedRecipes] = useState<Recipe[]>([]);
+  const [latestRecipes, setLatestRecipes] = useState<Recipe[]>([]);
+
+  //* note to self: Die Destrukturierung von { data, error } funktioniert nur, wenn man das Ergebnis eines Promises direkt zuweist, z. B. mit await.
   useEffect(() => {
-    supabase
-      .from("recipes")
-      .select("*")
-      .then((result) => {
-        if (result.error) {
-          console.error("Error fetching recipes:", result.error);
-        } else {
-          setRecipes(result.data);
-          // Log the fetched recipes to the console
-          console.log("Fetched recipes:", result.data);
-        }
-      });
+    const fetchTopRatedRecipes = async () => {
+      const { data: topRatedRecipes, error: topRatedError } = await supabase
+        .from("recipes")
+        .select("*")
+        .order("rating", { ascending: false })
+        .limit(3);
+
+      if (topRatedError) {
+        console.error("Error fetching recipes:", topRatedError);
+      } else {
+        setTopRatedRecipes(topRatedRecipes || []);
+        // Log the fetched recipes to the console
+        console.log("Fetched recipes:", topRatedRecipes);
+      }
+    };
+    fetchTopRatedRecipes();
+  }, []);
+
+  useEffect(() => {
+    const fetchLatestRecipes = async () => {
+      const { data: latestRecipes, error: latestError } = await supabase
+        .from("recipes")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(3);
+
+      if (latestError) {
+        console.error("Error fetching recipes:", latestError);
+      } else {
+        setLatestRecipes(latestRecipes || []);
+        // Log the fetched recipes to the console
+        console.log("Fetched recipes:", latestRecipes);
+      }
+    };
+    fetchLatestRecipes();
   }, []);
 
   return (
     <>
+      <h2>Die beliebtesten Rezepte</h2>
+      {topRatedRecipes.map((recipe) => (
+        <div key={recipe.id}>
+          <h3 className="font-bold">{recipe.name}</h3>
+          {recipe.image_url && (
+            <div className="w-[400px] h-[400px] overflow-hidden relative">
+              <img
+                src={recipe.image_url}
+                alt={recipe.name}
+                className="w-[400px] h-[400px] object-cover object-center"
+              />
+            </div>
+          )}
+          <p>{recipe.description}</p>
+          <Link to={`/recipes/${recipe.id}`} className="text-red-400 underline">
+            Zum Rezept
+          </Link>
+        </div>
+      ))}
       <div>
-        {recipes.map((recipe) => (
+        <h2>Neuste Rezepte</h2>
+        {latestRecipes.map((recipe) => (
           <div key={recipe.id}>
-            <h2 className="font-bold">{recipe.name}</h2>
+            <h3 className="font-bold">{recipe.name}</h3>
             {recipe.image_url && (
               <div className="w-[400px] h-[400px] overflow-hidden relative">
                 <img
