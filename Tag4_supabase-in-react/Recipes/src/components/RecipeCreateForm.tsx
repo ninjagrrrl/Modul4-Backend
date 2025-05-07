@@ -46,7 +46,7 @@ export default function RecipeCreateForm() {
   return (
     <div>
       <form>
-        //TODO - Formularfelder bauen
+        {/* TODO: Formularfelder bauen */}
         <h2>Erstelle ein neues Rezept!</h2>
         <button disabled={isPending} onClick={handleSubmit} type="submit">
           Rezept Erstellen

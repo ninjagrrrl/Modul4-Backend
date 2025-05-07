@@ -95,7 +95,9 @@ function HomeOverview() {
             >
               Zum Rezept
             </Link>
-            //TODO - Link in eine NavBar Komponente auslagern
+
+            {/* TODO - Link in eine NavBar Komponente auslagern
+             */}
             <Link to={`/new-recipe`}>Rezept erstellen</Link>
           </div>
         ))}

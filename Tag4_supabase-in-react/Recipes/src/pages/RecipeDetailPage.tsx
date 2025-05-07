@@ -49,7 +49,7 @@ export default function RecipeDetailsPage() {
       </ul>
       <p>Bewertung: {recipe.rating}</p>
       <p>Erstellt am: {recipe.created_at}</p>
-      //TODO - Delete Button in RecipeCreateForm.tsx auslagern
+      {/* TODO - Delete Button in RecipeCreateForm.tsx auslagern  */}
       <button
         onClick={handleDeleteRecipe}
         className="bg-red-500 text-white px-4 py-2 rounded"
