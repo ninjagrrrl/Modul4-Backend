@@ -1,65 +1,61 @@
-import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { Link } from "react-router-dom";
-
-type Recipe = {
-  category_id: string;
-  created_at: string | null;
-  description: string;
-  id: string;
-  image_url: string | null;
-  instructions: string;
-  name: string;
-  rating: number | null;
-  servings: number;
-};
+import { useQuery } from "@tanstack/react-query";
 
 function HomeOverview() {
-  const [topRatedRecipes, setTopRatedRecipes] = useState<Recipe[]>([]);
-  const [latestRecipes, setLatestRecipes] = useState<Recipe[]>([]);
-
   //* note to self: Die Destrukturierung von { data, error } funktioniert nur, wenn man das Ergebnis eines Promises direkt zuweist, z. B. mit await.
-  useEffect(() => {
-    const fetchTopRatedRecipes = async () => {
-      const { data: topRatedRecipes, error: topRatedError } = await supabase
+  const {
+    data: topRatedRecipes = [],
+    error: topRatedError,
+    isPending: isTopRatedPending,
+  } = useQuery({
+    queryKey: ["topRatedRecipes"],
+    queryFn: async () => {
+      const result = await supabase
         .from("recipes")
         .select("*")
         .order("rating", { ascending: false })
         .limit(3);
-
-      if (topRatedError) {
-        console.error("Error fetching recipes:", topRatedError);
+      if (result.data) {
+        return result.data;
       } else {
-        setTopRatedRecipes(topRatedRecipes || []);
-        // Log the fetched recipes to the console
-        console.log("Fetched recipes:", topRatedRecipes);
+        throw result.error;
       }
-    };
-    fetchTopRatedRecipes();
-  }, []);
+    },
+  });
 
-  useEffect(() => {
-    const fetchLatestRecipes = async () => {
-      const { data: latestRecipes, error: latestError } = await supabase
+  const {
+    data: latestRecipes = [],
+    error: latestError,
+    isLoading: isLatestPending,
+  } = useQuery({
+    queryKey: ["latestRecipes"],
+    queryFn: async () => {
+      const result = await supabase
         .from("recipes")
         .select("*")
         .order("created_at", { ascending: false })
         .limit(3);
 
-      if (latestError) {
-        console.error("Error fetching recipes:", latestError);
+      if (result.data) {
+        return result.data;
       } else {
-        setLatestRecipes(latestRecipes || []);
-        // Log the fetched recipes to the console
-        console.log("Fetched recipes:", latestRecipes);
+        throw result.error;
       }
-    };
-    fetchLatestRecipes();
-  }, []);
+    },
+  });
+
+  if (isTopRatedPending || isLatestPending) {
+    return <p>Loading...</p>;
+  }
+
+  if (topRatedError || latestError) {
+    return <p>Leider kaputt</p>;
+  }
 
   return (
     <>
-      <h2>Die beliebtesten Rezepte</h2>
+      <h2 className="text-4xl font-medium">Die beliebtesten Rezepte</h2>
       {topRatedRecipes.map((recipe) => (
         <div key={recipe.id}>
           <h3 className="font-bold">{recipe.name}</h3>
@@ -79,7 +75,7 @@ function HomeOverview() {
         </div>
       ))}
       <div>
-        <h2>Neuste Rezepte</h2>
+        <h2 className="text-4xl font-medium">Neuste Rezepte</h2>
         {latestRecipes.map((recipe) => (
           <div key={recipe.id}>
             <h3 className="font-bold">{recipe.name}</h3>
@@ -99,11 +95,12 @@ function HomeOverview() {
             >
               Zum Rezept
             </Link>
+            //TODO - Link in eine NavBar Komponente auslagern
+            <Link to={`/new-recipe`}>Rezept erstellen</Link>
           </div>
         ))}
       </div>
     </>
   );
 }
-
 export default HomeOverview;

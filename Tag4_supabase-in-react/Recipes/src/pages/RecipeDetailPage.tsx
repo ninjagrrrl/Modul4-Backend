@@ -1,7 +1,8 @@
-import { fetchRecipeWithDetails } from "@/hooks/fetchRecipeWithDetails";
+import { fetchRecipeWithDetails } from "@/components/fetchRecipeWithDetails";
 import type { RecipeDetails } from "@/types/RecipeDetailsTypes";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { supabase } from "@/lib/supabaseClient";
 
 export default function RecipeDetailsPage() {
   const { id } = useParams<{ id: string }>();
@@ -17,6 +18,13 @@ export default function RecipeDetailsPage() {
 
   if (!recipe) return <p>Loading…</p>;
 
+  //TODO - handleDeleteRecipe Fn in RecipeCreateForm.tsx auslagern
+  const handleDeleteRecipe = async () => {
+    if (!id) return;
+    await supabase.from("recipes").delete().eq("id", id);
+    console.log("Recipe deleted");
+  };
+
   return (
     <div>
       {recipe.image_url && (
@@ -31,7 +39,6 @@ export default function RecipeDetailsPage() {
       <h1>{recipe.name}</h1>
       <p>{recipe.description}</p>
       <p>Kategorie: {recipe.categories.name}</p>
-
       <h2>Zutaten</h2>
       <ul>
         {recipe.ingredients.map((ing) => (
@@ -42,6 +49,13 @@ export default function RecipeDetailsPage() {
       </ul>
       <p>Bewertung: {recipe.rating}</p>
       <p>Erstellt am: {recipe.created_at}</p>
+      //TODO - Delete Button in RecipeCreateForm.tsx auslagern
+      <button
+        onClick={handleDeleteRecipe}
+        className="bg-red-500 text-white px-4 py-2 rounded"
+      >
+        Delete
+      </button>
     </div>
   );
 }
