@@ -75,7 +75,7 @@ function HomeOverview() {
         </div>
       ))}
       <div>
-        <h2 className="text-4xl font-medium">Neuste Rezepte</h2>
+        <h2 className="text-4xl font-medium">Neueste Rezepte</h2>
         {latestRecipes.map((recipe) => (
           <div key={recipe.id}>
             <h3 className="font-bold">{recipe.name}</h3>
@@ -95,10 +95,6 @@ function HomeOverview() {
             >
               Zum Rezept
             </Link>
-
-            {/* TODO - Link in eine NavBar Komponente auslagern
-             */}
-            <Link to={`/new-recipe`}>Rezept erstellen</Link>
           </div>
         ))}
       </div>

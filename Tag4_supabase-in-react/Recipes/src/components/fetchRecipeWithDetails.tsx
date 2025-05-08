@@ -20,29 +20,3 @@ export const fetchRecipeWithDetails = async (
 
   return superbaseResponse.data;
 };
-
-//   `
-//   category_id,
-//   created_at,
-//   description,
-//   id,
-//   image_url,
-//   instructions,
-//   name,
-//   rating,
-//   servings,
-//   ingredients (
-//     additional_info,
-//     created_at,
-//     id,
-//     name,
-//     quantity,
-//     recipe_id,
-//     unit
-//     ),
-//   categories (
-//     id,
-//     name,
-//     created_at
-//   )
-// `
