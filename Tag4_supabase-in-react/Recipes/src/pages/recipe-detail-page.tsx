@@ -1,8 +1,8 @@
-import { fetchRecipeWithDetails } from "@/components/fetchRecipeWithDetails";
-import type { RecipeDetails } from "@/types/RecipeDetailsTypes";
+import { fetchRecipeWithDetails } from "@/components/fetch-recipes-details";
+import type { RecipeDetails } from "@/types/recipe-details-types";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { supabase } from "@/lib/supabaseClient";
+import { supabase } from "@/lib/client";
 
 export default function RecipeDetailsPage() {
   const { id } = useParams<{ id: string }>();

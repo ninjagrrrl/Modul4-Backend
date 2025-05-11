@@ -1,12 +1,12 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import RecipeDetailPage from "./pages/RecipeDetailPage";
-import HomeOverview from "./pages/HomeOverview";
-import RootLayout from "./layouts/RootLayout";
-import RecipeCreatePage from "./pages/RecipeCreatePage";
-import LoginPage from "./pages/LoginPage";
-import SignupPage from "./pages/SignupPage";
-import { AuthContextProvider } from "./components/contexts/auth-context";
-import ProfilePage from "./pages/ProfilePage";
+import RecipeDetailPage from "./pages/recipe-detail-page";
+import HomeOverview from "./pages/home-page";
+import RootLayout from "./layouts/root-layout";
+import RecipeCreatePage from "./pages/recipe-create-page";
+import LoginPage from "./pages/login-page";
+import SignupPage from "./pages/sign-up-page";
+import { AuthContextProvider } from "./contexts/auth-context";
+import Dashboard from "./pages/dashboard";
 const router = createBrowserRouter([
   {
     Component: RootLayout,
@@ -16,7 +16,7 @@ const router = createBrowserRouter([
       { path: "/new-recipe", Component: RecipeCreatePage },
       { path: "/login", Component: LoginPage },
       { path: "/sign-up", Component: SignupPage },
-      { path: "/profile", Component: ProfilePage },
+      { path: "/dashboard", Component: Dashboard },
     ],
   },
 ]);

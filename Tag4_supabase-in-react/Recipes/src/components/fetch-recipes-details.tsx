@@ -1,5 +1,5 @@
-import { supabase } from "@/lib/supabaseClient";
-import type { RecipeDetails } from "@/types/RecipeDetailsTypes";
+import { supabase } from "@/lib/client";
+import type { RecipeDetails } from "@/types/recipe-details-types";
 
 // Funktion, um ein Rezept mit Zutaten und Kategorie zu holen
 

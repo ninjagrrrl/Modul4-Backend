@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { supabase } from "@/lib/supabaseClient";
+import { supabase } from "@/lib/client";
 import { queryClient } from "@/main";
 
 //TODO - handleDeleteRecipe FN einbauen
