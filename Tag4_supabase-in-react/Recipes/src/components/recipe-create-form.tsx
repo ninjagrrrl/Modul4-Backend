@@ -12,6 +12,28 @@ export default function RecipeCreateForm() {
   const [instructions, setInstructions] = useState("");
   const [isPending, setIsPending] = useState(false);
 
+  const [ingredients, setIngredients] = useState<Ingredient[]>([
+    { name: "", quantity: "", unit: "", additional_info: "" },
+  ]);
+
+  type Ingredient = {
+    name: string;
+    quantity: string;
+    unit: string;
+    additional_info: string;
+  };
+  const addIngredient = () => {
+    const emptyIngredient = {
+      name: "",
+      quantity: "",
+      unit: "",
+      additional_info: "",
+    };
+    setIngredients((oldIngredients) => [...oldIngredients, emptyIngredient]);
+  };
+  //// reminder: das hier NICHT machen, weil wir den Zustand nicht ändern können, deshalb den setState verwenden
+  // ingredients.push(emptyIngredient);
+
   const handleSubmit = (e: React.MouseEvent) => {
     e.preventDefault();
 
@@ -48,10 +70,11 @@ export default function RecipeCreateForm() {
   };
   return (
     <div>
+      <h2>Erstelle ein neues Rezept!</h2>
       <form>
-        <h2>Erstelle ein neues Rezept!</h2>
         <input
           type="text"
+          //// name: das name-feld bestimmt, unter welchem namen die Daten im Backend ankommen
           name="recipe-name"
           placeholder="Wie heißt dein Gericht?"
           value={name}
@@ -102,6 +125,60 @@ export default function RecipeCreateForm() {
           </option>
           <option value="1540c417-b4e0-4797-819d-db64c29692af">Dessert</option>
         </select>
+
+        <h3>Zutaten</h3>
+        {ingredients.map((ingredient, index) => (
+          <div key={index}>
+            <input
+              type="text"
+              name="ingredient-name"
+              placeholder="Zutat"
+              value={ingredient.name}
+              onChange={(e) => {
+                const newIngredients = [...ingredients];
+                newIngredients[index].name = e.target.value;
+                setIngredients(newIngredients);
+              }}
+            />
+            <input
+              type="text"
+              name="ingredient-quantity"
+              placeholder="Menge"
+              value={ingredient.quantity}
+              onChange={(e) => {
+                const newIngredients = [...ingredients];
+                newIngredients[index].quantity = e.target.value;
+                setIngredients(newIngredients);
+              }}
+            />
+            <input
+              type="text"
+              name="ingredient-unit"
+              placeholder="Einheit"
+              value={ingredient.unit}
+              onChange={(e) => {
+                const newIngredients = [...ingredients];
+                newIngredients[index].unit = e.target.value;
+                setIngredients(newIngredients);
+              }}
+            />
+            <input
+              type="text"
+              name="ingredient-additional-info"
+              placeholder="Zusatzinfo"
+              value={ingredient.additional_info}
+              onChange={(e) => {
+                const newIngredients = [...ingredients];
+                newIngredients[index].additional_info = e.target.value;
+                setIngredients(newIngredients);
+              }}
+            />
+          </div>
+        ))}
+        <button type="button" onClick={addIngredient}>
+          Zutat hinzufügen
+        </button>
+
         <button disabled={isPending} onClick={handleSubmit} type="submit">
           Rezept Erstellen
         </button>

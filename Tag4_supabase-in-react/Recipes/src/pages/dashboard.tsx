@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 function Dashboard() {
   const {
     data: authUser,
+
     isError: isAuthError,
     isPending: isAuthPending,
   } = useQuery({
@@ -17,7 +18,8 @@ function Dashboard() {
     },
     queryKey: ["auth-user"],
   });
-  //FIXME - hier gibt es einen Fehler, die Daten kommen nicht an
+
+  console.log("authUser", authUser);
   const {
     data: profile,
     isError: isProfileError,
@@ -28,7 +30,8 @@ function Dashboard() {
         .from("profiles")
         .select("first_name, last_name")
         .eq("id", authUser!.id)
-        .single();
+        .maybeSingle()
+        .throwOnError();
       if (result.data) {
         return result.data;
       } else {
@@ -48,10 +51,11 @@ function Dashboard() {
   return (
     <div>
       <p>
-        Hallo {profile?.first_name}
-        {profile?.last_name}
+        Hallo {profile?.first_name} {profile?.last_name}
       </p>
       <p>Email: {authUser?.email}</p>
+      <p>Created at: {authUser?.created_at}</p>
+      <p>Last Sign in at: {authUser?.last_sign_in_at}</p>
     </div>
   );
 }
